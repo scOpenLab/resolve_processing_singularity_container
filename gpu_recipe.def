@@ -9,35 +9,46 @@ From: vanvalenlab/deepcell-applications:0.4.0-gpu
 # make directory to mount the data
 mkdir /data
 
-# install wget, unzip, python3.8 and pip 
+# install wget, unzip, python3.11 and pip 
 apt update
 apt install -y wget
 apt install -y unzip
 
+add-apt-repository ppa:deadsnakes/ppa
+apt install -y python3.10
+
 wget https://bootstrap.pypa.io/get-pip.py
-python3.8 get-pip.py
+python3.10 get-pip.py
 rm get-pip.py
+
+pip3.10 install -U setuptools
 
 ######################################################################
 ## Install ROIfile and imagecodecs
 ######################################################################
-pip3.8 install roifile==2022.3.18 
-pip3.8 install imagecodecs==2022.9.26 
+pip3.10 install roifile
+pip3.10 install imagecodecs
 
 ################################################################################
 ## Install Cellpose
 ################################################################################
 
 # Get cellpose models
-wget --save-cookies cookies.txt 'https://docs.google.com/uc?export=download&id=1zHGFYCqRCTwTPwgEUMNZu0EhQy2zaovg' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1/p' > confirm.txt
-wget --load-cookies cookies.txt -O models.zip 'https://docs.google.com/uc?export=download&id=1zHGFYCqRCTwTPwgEUMNZu0EhQy2zaovg&confirm='$(<confirm.txt)
+wget --save-cookies cookies.txt \
+    'https://docs.google.com/uc?export=download&id=1zHGFYCqRCTwTPwgEUMNZu0EhQy2zaovg' -O- \
+    | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1/p' > confirm.txt
+wget --load-cookies cookies.txt -O \
+    models.zip 'https://docs.google.com/uc?export=download&id=1zHGFYCqRCTwTPwgEUMNZu0EhQy2zaovg&confirm='$(<confirm.txt)
 
 mkdir -p /root/.cellpose/models
 tar -cvzf models.zip /root/.cellpose/models
 rm confirm.txt cookies.txt models.zip
 
 # install Cellpose
-pip3.8 install cellpose==2.0.5
+pip3.10 install cellpose
+
+# install scikit-image
+pip3.10 install scikit-image
 
 ######################################################################
 ## Get kras models for Mesmer
@@ -51,6 +62,9 @@ rm MultiplexSegmentation-9.tar.gz
 ################################################################################
 ## Install MindaGap
 ################################################################################
+pip3.10 install rich
+pip3.10 install matplotlib
+pip3.10 install pandas
 wget https://github.com/ViriatoII/MindaGap/archive/refs/heads/main.zip
 unzip main.zip
 mv MindaGap-main/ /MindaGap
